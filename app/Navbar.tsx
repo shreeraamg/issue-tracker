@@ -1,5 +1,6 @@
 "use client";
 
+import { Skeleton } from "@/app/components";
 import { Button, Container, Flex, Text } from "@radix-ui/themes";
 import classNames from "classnames";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -9,9 +10,9 @@ import { AiFillBug } from "react-icons/ai";
 
 const Navbar = () => {
   return (
-    <nav className="border-b mb-5 px-5 h-14 py-3">
+    <nav className="border-b mb-5 px-5">
       <Container>
-        <Flex justify="between">
+        <Flex className="h-14" align="center" justify="between">
           <Flex align="center" gap="3">
             <Link href="/">
               <AiFillBug />
@@ -56,7 +57,7 @@ const NavLinks = () => {
 const AuthStatus = () => {
   const { status, data: session } = useSession();
 
-  if (status === "loading") return null;
+  if (status === "loading") return <Skeleton width="5rem" height="2rem" />;
 
   if (status === "unauthenticated")
     return <Button onClick={async () => signIn()}>SignIn</Button>;
