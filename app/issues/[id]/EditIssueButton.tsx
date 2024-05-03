@@ -4,12 +4,10 @@ import { MdOutlineEdit } from "react-icons/md";
 
 const EditIssueButton = ({ issueId }: { issueId: number }) => {
   return (
-    <Link href={`/issues/${issueId}/edit`}>
-      <Button>
-        <MdOutlineEdit size={16} />
-        Edit Issue
-      </Button>
-    </Link>
+    <Button>
+      <MdOutlineEdit size={16} />
+      <Link href={`/issues/${issueId}/edit`}>Edit Issue</Link>
+    </Button>
   );
 };
 
