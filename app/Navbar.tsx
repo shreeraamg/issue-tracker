@@ -5,7 +5,15 @@ import { usePathname } from "next/navigation";
 import { AiFillBug } from "react-icons/ai";
 import classNames from "classnames";
 import { signIn, useSession, signOut } from "next-auth/react";
-import { Box, Button, Container, Flex } from "@radix-ui/themes";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  DropdownMenu,
+  Flex,
+  Text,
+} from "@radix-ui/themes";
 
 const Navbar = () => {
   const currentPath = usePathname();
@@ -41,14 +49,19 @@ const Navbar = () => {
               ))}
             </ul>
           </Flex>
-          <Box>
+          <Flex align="center" gapX="4">
             {status === "authenticated" && (
-              <Button onClick={() => signOut()}>Log out</Button>
+              <>
+                <Text>{session.user?.name}</Text>
+                <Button variant="soft" color="gray" onClick={() => signOut()}>
+                  Logout
+                </Button>
+              </>
             )}
             {status === "unauthenticated" && (
               <Button onClick={async () => signIn()}>SignIn</Button>
             )}
-          </Box>
+          </Flex>
         </Flex>
       </Container>
     </nav>
