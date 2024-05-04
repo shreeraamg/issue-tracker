@@ -1,24 +1,24 @@
 "use client";
 
+import { Skeleton } from "@/app/components";
 import { Issue, User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
-import { Skeleton } from "@/app/components";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
 const AsigneeSelect = ({ issue }: { issue: Issue }) => {
-  const {
-    data: users,
-    error,
-    isLoading,
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: () => axios.get("/api/users").then((res) => res.data),
-    staleTime: 60 * 1000, // 60seconds
-    refetchOnWindowFocus: false,
-    retry: 3,
-  });
+  const { data: users, error, isLoading } = useUsers();
+
+  const assignIssue = (userId: string) => {
+    axios
+      .patch("/api/issues/" + issue.id, {
+        assignedToUserId: userId === "null" ? null : userId,
+      })
+      .catch((err) => {
+        toast.error("Changes could not be saved.");
+      });
+  };
 
   if (isLoading) return <Skeleton height="2rem" />;
 
@@ -28,15 +28,7 @@ const AsigneeSelect = ({ issue }: { issue: Issue }) => {
     <>
       <Select.Root
         defaultValue={issue.assignedToUserId || "null"}
-        onValueChange={(userId) => {
-          axios
-            .patch("/api/issues/" + issue.id, {
-              assignedToUserId: userId === "null" ? null : userId,
-            })
-            .catch((err) => {
-              toast.error("Changes could not be saved.");
-            });
-        }}
+        onValueChange={assignIssue}
       >
         <Select.Trigger placeholder="Assign..." />
         <Select.Content variant="soft">
@@ -55,5 +47,14 @@ const AsigneeSelect = ({ issue }: { issue: Issue }) => {
     </>
   );
 };
+
+const useUsers = () =>
+  useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () => axios.get("/api/users").then((res) => res.data),
+    staleTime: 60 * 15 * 1000, // 15 minutes
+    refetchOnWindowFocus: false,
+    retry: 3,
+  });
 
 export default AsigneeSelect;
