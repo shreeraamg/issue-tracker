@@ -10,15 +10,15 @@ interface Props {
 
 const IssueSummary = ({ open, inProgress, closed }: Props) => {
   const statuses: { label: string; value: number; status: Status }[] = [
-    { label: "Open Issues", value: open, status: "OPEN" },
-    { label: "In-Progress Issues", value: inProgress, status: "IN_PROGRESS" },
-    { label: "Closed Issues", value: closed, status: "CLOSED" },
+    { label: "Open", value: open, status: "OPEN" },
+    { label: "In-Progress", value: inProgress, status: "IN_PROGRESS" },
+    { label: "Closed", value: closed, status: "CLOSED" },
   ];
 
   return (
     <Flex gap="4">
       {statuses.map((status) => (
-        <Card key={status.status}>
+        <Card key={status.status} className="w-full">
           <Flex direction="column" gap="1">
             <Link
               href={`/issues/list?status=${status.status}`}

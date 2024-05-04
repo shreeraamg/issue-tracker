@@ -13,7 +13,7 @@ const LatestIssues = async () => {
   });
 
   return (
-    <>
+    <Flex direction="column">
       <Heading size="5" mb="4">
         Latest Issues
       </Heading>
@@ -41,7 +41,7 @@ const LatestIssues = async () => {
           ))}
         </Table.Body>
       </Table.Root>
-    </>
+    </Flex>
   );
 };
 
